@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Árboles en Matemáticas | Guía Interactiva Completa</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Inter -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- FontAwesome v6 for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- MathJax v3 for Mathematical Formulas -->
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              nature: {
+                50: '#f0fdf4',
+                100: '#dcfce7',
+                200: '#bbf7d0',
+                500: '#22c55e',
+                600: '#16a34a',
+                700: '#15803d',
+                800: '#166534',
+                900: '#14532d',
+              },
+              ocean: {
+                50: '#f0f9ff',
+                100: '#e0f2fe',
+                200: '#bae6fd',
+                500: '#0ea5e9',
+                600: '#0284c7',
+                700: '#0369a1',
+                800: '#075985',
+                900: '#082f49',
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .glass-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+      }
+      .canvas-container {
+        position: relative;
+        background: radial-gradient(circle, #ffffff 0%, #f8fafc 100%);
+        border-radius: 1rem;
+        box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.04);
+      }
+      @keyframes pulse-soft {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.03);
+        }
+      }
+      .animate-pulse-soft {
+        animation: pulse-soft 3s infinite ease-in-out;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-nature-500 selection:text-white min-h-screen flex flex-col justify-between"
+  >
+    <!-- Header Navigation -->
+    <header
+      class="sticky top-0 z-50 glass-card border-b border-slate-200/80 shadow-sm"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between"
+      >
+        <div class="flex items-center space-x-3">
+          <div
+            class="w-10 h-10 rounded-xl bg-gradient-to-tr from-nature-600 to-ocean-500 flex items-center justify-center text-white shadow-md"
+          >
+            <i class="fa-solid font-bold fa-network-wired text-lg"></i>
+          </div>
+          <div>
+            <h1
+              class="text-xl font-bold bg-gradient-to-r from-nature-800 to-ocean-700 bg-clip-text text-transparent"
+            >
+              Teoría de Árboles
+            </h1>
+            <p class="text-xs text-slate-500">
+              Matemáticas Discretas & Teoría de Grafos
+            </p>
+          </div>
+        </div>
+        <nav
+          class="hidden md:flex items-center space-x-1 text-sm font-medium text-slate-600"
+        >
+          <a
+            href="#teoria"
+            class="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-nature-700 transition"
+            >Definición</a
+          >
+          <a
+            href="#propiedades"
+            class="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-nature-700 transition"
+            >Grado, Profundidad & Altura</a
+          >
+          <a
+            href="#bosques"
+            class="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-nature-700 transition"
+            >Bosques</a
+          >
+          <a
+            href="#simulador"
+            class="px-3 py-2 rounded-lg bg-nature-50 text-nature-700 font-semibold hover:bg-nature-100 transition"
+            ><i class="fa-solid fa-flask mr-1.5"></i>Simulador</a
+          >
+          <a
+            href="#quiz"
+            class="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-nature-700 transition"
+            >Quiz</a
+          >
+        </nav>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+      <!-- Hero & Analogía -->
+      <section
+        class="bg-gradient-to-br from-slate-900 via-ocean-900 to-slate-900 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden"
+      >
+        <div
+          class="absolute -right-10 -bottom-10 opacity-10 text-white pointer-events-none"
+        >
+          <i class="fa-solid fa-tree text-[280px]"></i>
+        </div>
+        <div class="max-w-3xl relative z-10 space-y-4">
+          <span
+            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-nature-500/20 text-nature-300 border border-nature-500/30"
+          >
+            <i class="fa-solid fa-leaf text-xs"></i> Concepto Fundamental
+          </span>
+          <h2
+            class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight"
+          >
+            Comprendiendo los Árboles en Matemáticas
+          </h2>
+          <p class="text-slate-300 text-base sm:text-lg leading-relaxed">
+            Un <strong>árbol</strong> en teoría de grafos es un grafo conexo e
+            acíclico. Piensa en una red jerárquica: un árbol genealógico, el
+            sistema de archivos de una computadora o las ramas de un árbol
+            natural. No existen caminos cerrados ni circuitos alternativos.
+          </p>
+          <div class="pt-4 flex flex-wrap gap-4">
+            <a
+              href="#simulador"
+              class="px-6 py-3 rounded-xl bg-nature-500 hover:bg-nature-600 text-slate-950 font-bold transition shadow-lg flex items-center gap-2"
+            >
+              <i class="fa-solid fa-play text-sm"></i> Probar Simulador
+              Interactivo
+            </a>
+            <a
+              href="#teoria"
+              class="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium backdrop-blur transition border border-white/10"
+            >
+              Explorar Teoría
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Definición Teórica & Regla de Oro -->
+      <section id="teoria" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-4">
+          <div
+            class="w-12 h-12 rounded-xl bg-nature-100 text-nature-700 flex items-center justify-center text-xl font-bold"
+          >
+            <i class="fa-solid font-bold fa-circle-nodes"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-slate-900">¿Qué es un Árbol?</h3>
+          <p class="text-slate-600 leading-relaxed">
+            Un grafo no dirigido \(G = (V, E)\) se clasifica como
+            <strong>Árbol</strong> si cumple estrictamente dos propiedades:
+          </p>
+          <ul class="space-y-3 text-slate-700">
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-circle-check text-nature-600 mt-1"></i>
+              <span
+                ><strong>Conectividad:</strong> Existe al menos un camino entre
+                cualquier par de vértices (nodos).</span
+              >
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-circle-check text-nature-600 mt-1"></i>
+              <span
+                ><strong>Aciclicidad:</strong> No contiene ningún ciclo o
+                circuito. Es decir, no hay caminos cerrados que regresen al
+                mismo nodo sin repetir aristas.</span
+              >
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="glass-card rounded-2xl p-6 sm:p-8 space-y-4 border-l-4 border-l-nature-500"
+        >
+          <div
+            class="w-12 h-12 rounded-xl bg-ocean-100 text-ocean-700 flex items-center justify-center text-xl font-bold"
+          >
+            <i class="fa-solid fa-square-root-variable"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-slate-900">
+            La Regla de Oro del Árbol
+          </h3>
+          <p class="text-slate-600 leading-relaxed">
+            Para todo árbol individual con \(N\) vértices o nodos, el número de
+            aristas (o enlaces) \(E\) satisface exactamente:
+          </p>
+          <div
+            class="p-4 bg-slate-900 text-white rounded-xl text-center text-xl font-mono font-bold shadow-inner"
+          >
+            $$E = N - 1$$
+          </div>
+          <p class="text-xs text-slate-500">
+            Si agregas una sola arista a un árbol de \(N\) nodos, creas un
+            ciclo. Si quitas una arista, descompones el árbol en dos componentes
+            no conexas.
+          </p>
+        </div>
+      </section>
+
+      <!-- Nueva Sección Teórica: Grado, Profundidad y Altura -->
+      <section id="propiedades" class="space-y-6">
+        <div class="text-center max-w-2xl mx-auto space-y-2">
+          <h3 class="text-3xl font-extrabold text-slate-900">
+            Propiedades de Medición en Árboles
+          </h3>
+          <p class="text-slate-600">
+            Métricas esenciales para caracterizar la topología y jerarquía de un
+            árbol con raíz.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Grado -->
+          <div
+            class="glass-card rounded-2xl p-6 space-y-3 relative overflow-hidden"
+          >
+            <div
+              class="w-10 h-10 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-lg font-bold"
+            >
+              <i class="fa-solid fa-diagram-project"></i>
+            </div>
+            <h4 class="text-xl font-bold text-slate-900">1. Grado (Degree)</h4>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              El <strong>grado de un nodo</strong> \(g(v)\) es el número de
+              aristas incidentes en él (o número de hijos en un árbol
+              enraizado).
+            </p>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              El <strong>grado del árbol</strong> es el grado máximo de todos
+              sus nodos:
+            </p>
+            <div
+              class="p-3 bg-amber-50 border border-amber-200 rounded-lg text-center font-mono text-amber-900 text-sm"
+            >
+              $$\text{Grado}(T) = \max_{v \in V} g(v)$$
+            </div>
+          </div>
+
+          <!-- Profundidad / Nivel -->
+          <div
+            class="glass-card rounded-2xl p-6 space-y-3 relative overflow-hidden"
+          >
+            <div
+              class="w-10 h-10 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-lg font-bold"
+            >
+              <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <h4 class="text-xl font-bold text-slate-900">
+              2. Profundidad / Nivel
+            </h4>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              La <strong>profundidad</strong> (o nivel) de un nodo \(v\) es la
+              longitud del único camino simple desde la
+              <strong>raíz</strong> hasta dicho nodo.
+            </p>
+            <ul class="text-xs space-y-1 text-slate-600 list-disc list-inside">
+              <li>La raíz siempre tiene profundidad = <strong>0</strong>.</li>
+              <li>
+                Los hijos directos de la raíz tienen profundidad =
+                <strong>1</strong>.
+              </li>
+            </ul>
+            <div
+              class="p-3 bg-blue-50 border border-blue-200 rounded-lg text-center font-mono text-blue-900 text-sm"
+            >
+              $$P(\text{raíz}) = 0, \quad P(\text{hijo}) = P(\text{padre}) + 1$$
+            </div>
+          </div>
+
+          <!-- Altura -->
+          <div
+            class="glass-card rounded-2xl p-6 space-y-3 relative overflow-hidden"
+          >
+            <div
+              class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg font-bold"
+            >
+              <i class="fa-solid fa-ruler-vertical"></i>
+            </div>
+            <h4 class="text-xl font-bold text-slate-900">
+              3. Altura del Árbol
+            </h4>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              La <strong>altura de un árbol</strong> enraizado es la profundidad
+              máxima alcanzada por cualquiera de sus nodos (hojas).
+            </p>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Es equivalente al número de aristas del camino más largo desde la
+              raíz a una hoja:
+            </p>
+            <div
+              class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-center font-mono text-emerald-900 text-sm"
+            >
+              $$\text{Altura}(T) = \max_{v \in V} P(v)$$
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bosques & Fórmula General -->
+      <section id="bosques" class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+        <div
+          class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-200 pb-6"
+        >
+          <div>
+            <span
+              class="px-3 py-1 rounded-full text-xs font-semibold bg-ocean-100 text-ocean-800"
+              >Concepto Múltiple</span
+            >
+            <h3 class="text-2xl font-bold text-slate-900 mt-1">
+              Bosques (Forests)
+            </h3>
+          </div>
+          <div
+            class="px-4 py-2 bg-slate-900 text-white rounded-xl font-mono text-lg font-bold shadow-sm"
+          >
+            $$E = N - M$$
+          </div>
+        </div>
+
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 gap-6 text-slate-600 text-sm leading-relaxed"
+        >
+          <p>
+            Un <strong>Bosque</strong> es un grafo acíclico no dirigido. Cada
+            una de las componentes conexas que conforman un bosque es, por sí
+            misma, un árbol independiente.
+          </p>
+          <p>
+            Si un bosque consta de \(N\) nodos distribuidos en \(M\) árboles no
+            conectados (componentes conexas), el número total de aristas del
+            conjunto es exactamente \(E = N - M\). Un árbol es simplemente un
+            bosque con \(M = 1\).
+          </p>
+        </div>
+      </section>
+
+      <!-- SIMULADOR INTERACTIVO -->
+      <section id="simulador" class="space-y-6">
+        <div
+          class="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+        >
+          <div>
+            <h3
+              class="text-2xl font-bold text-slate-900 flex items-center gap-2"
+            >
+              <i class="fa-solid fa-flask text-nature-600"></i> Simulador
+              Interactivo de Árboles y Bosques
+            </h3>
+            <p class="text-slate-500 text-sm">
+              Construye tu grafo, define raíces y examina las especificaciones
+              detalladas por árbol.
+            </p>
+          </div>
+        </div>
+
+        <!-- Toolbar & Controls -->
+        <div
+          class="glass-card p-4 rounded-xl flex flex-wrap items-center gap-3"
+        >
+          <span
+            class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-2"
+            >Modo:</span
+          >
+
+          <button
+            id="btn-mode-add"
+            onclick="setMode('add')"
+            class="mode-btn px-4 py-2 rounded-lg text-sm font-semibold transition bg-nature-600 text-white shadow-sm flex items-center gap-2"
+          >
+            <i class="fa-solid fa-plus"></i> Añadir Nodo
+          </button>
+          <button
+            id="btn-mode-connect"
+            onclick="setMode('connect')"
+            class="mode-btn px-4 py-2 rounded-lg text-sm font-semibold transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-2"
+          >
+            <i class="fa-solid fa-link"></i> Unir Nodos
+          </button>
+          <button
+            id="btn-mode-root"
+            onclick="setMode('root')"
+            class="mode-btn px-4 py-2 rounded-lg text-sm font-semibold transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-2"
+          >
+            <i class="fa-solid fa-crown text-amber-500"></i> Seleccionar Raíz
+          </button>
+          <button
+            id="btn-mode-delete"
+            onclick="setMode('delete')"
+            class="mode-btn px-4 py-2 rounded-lg text-sm font-semibold transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-2"
+          >
+            <i class="fa-solid fa-trash-can text-red-500"></i> Borrar Nodo
+          </button>
+          <button
+            onclick="clearGraph()"
+            class="ml-auto px-4 py-2 rounded-lg text-sm font-semibold bg-red-50 text-red-600 hover:bg-red-100 transition flex items-center gap-2 border border-red-200"
+          >
+            <i class="fa-solid fa-rotate-left"></i> Limpiar Todo
+          </button>
+        </div>
+
+        <!-- Canvas Visualization Container -->
+        <div
+          class="canvas-container h-[420px] w-full border border-slate-200 relative cursor-crosshair"
+        >
+          <svg id="svg-canvas" class="w-full h-full absolute inset-0"></svg>
+
+          <!-- Status Banner Overlay -->
+          <div
+            id="status-banner"
+            class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-600 shadow-sm font-medium"
+          >
+            Haz clic en el lienzo para añadir nodos.
+          </div>
+        </div>
+
+        <!-- Panel Superior de Estadísticas Globales del Bosque -->
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
+          <div class="glass-card p-4 rounded-xl text-center">
+            <span class="text-xs text-slate-500 font-medium block"
+              >Nodos Total (\(N\))</span
+            >
+            <span
+              id="stat-n"
+              class="text-2xl font-extrabold text-slate-800 font-mono"
+              >0</span
+            >
+          </div>
+          <div class="glass-card p-4 rounded-xl text-center">
+            <span class="text-xs text-slate-500 font-medium block"
+              >Aristas Total (\(E\))</span
+            >
+            <span
+              id="stat-e"
+              class="text-2xl font-extrabold text-ocean-600 font-mono"
+              >0</span
+            >
+          </div>
+          <div class="glass-card p-4 rounded-xl text-center">
+            <span class="text-xs text-slate-500 font-medium block"
+              >Árboles / Comp. (\(M\))</span
+            >
+            <span
+              id="stat-m"
+              class="text-2xl font-extrabold text-nature-600 font-mono"
+              >0</span
+            >
+          </div>
+          <div class="glass-card p-4 rounded-xl text-center">
+            <span class="text-xs text-slate-500 font-medium block"
+              >Grado Máx. del Bosque</span
+            >
+            <span
+              id="stat-max-degree"
+              class="text-2xl font-extrabold text-amber-600 font-mono"
+              >0</span
+            >
+          </div>
+          <div
+            class="glass-card p-4 rounded-xl text-center col-span-2 sm:col-span-1"
+          >
+            <span class="text-xs text-slate-500 font-medium block"
+              >Altura Máx. Bosque</span
+            >
+            <span
+              id="stat-max-height"
+              class="text-2xl font-extrabold text-purple-600 font-mono"
+              >0</span
+            >
+          </div>
+        </div>
+
+        <!-- Panel Inferior: Especificaciones Detalladas por Cada Árbol del Bosque -->
+        <div class="glass-card rounded-2xl p-6 space-y-4">
+          <div
+            class="flex items-center justify-between border-b border-slate-200 pb-3"
+          >
+            <h4
+              class="text-lg font-bold text-slate-900 flex items-center gap-2"
+            >
+              <i class="fa-solid fa-list-check text-ocean-600"></i> Desglose
+              Individual de Especificaciones por Árbol
+            </h4>
+            <span
+              class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full font-medium"
+              >Actualización en vivo</span
+            >
+          </div>
+
+          <div
+            id="forest-breakdown-container"
+            class="grid grid-cols-1 md:grid-cols-2 gap-4"
+          >
+            <div class="p-6 text-center text-slate-400 text-sm col-span-2">
+              No hay nodos creados en el simulador. Utiliza las herramientas
+              para añadir nodos y conexiones.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quiz Relámpago -->
+      <section id="quiz" class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+        <div class="border-b border-slate-200 pb-4">
+          <span
+            class="text-xs font-bold text-nature-600 uppercase tracking-wider"
+            >Evaluación Rápida</span
+          >
+          <h3 class="text-2xl font-bold text-slate-900 mt-1">
+            Quiz de Demostración
+          </h3>
+          <p class="text-slate-600 text-sm">
+            Comprueba tus conocimientos sobre las fórmulas y propiedades de los
+            árboles.
+          </p>
+        </div>
+
+        <div id="quiz-container" class="space-y-6">
+          <!-- Pregunta 1 -->
+          <div class="space-y-3">
+            <p class="font-medium text-slate-800">
+              1. Un árbol conexo tiene 15 nodos (\(N = 15\)). ¿Cuántas aristas
+              (\(E\)) posee obligatoriamente?
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <button
+                onclick="checkAnswer(1, 0, false)"
+                class="q1-opt p-3 text-left text-sm rounded-xl border border-slate-200 hover:bg-slate-50 transition"
+              >
+                a) 15 aristas
+              </button>
+              <button
+                onclick="checkAnswer(1, 1, true)"
+                class="q1-opt p-3 text-left text-sm rounded-xl border border-slate-200 hover:bg-slate-50 transition"
+              >
+                b) 14 aristas
+              </button>
+              <button
+                onclick="checkAnswer(1, 2, false)"
+                class="q1-opt p-3 text-left text-sm rounded-xl border border-slate-200 hover:bg-slate-50 transition"
+              >
+                c) 16 aristas
+              </button>
+            </div>
+            <p id="q1-feedback" class="text-xs font-medium hidden"></p>
+          </div>
+
+          <!-- Pregunta 2 -->
+          <div class="space-y-3">
+            <p class="font-medium text-slate-800">
+              2. Si un bosque contiene 20 nodos y un total de 16 aristas,
+              ¿cuántos árboles componen dicho bosque?
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <button
+                onclick="checkAnswer(2, 0, false)"
+                class="q2-opt p-3 text-left text-sm rounded-xl border border-slate-200 hover:bg-slate-50 transition"
+              >
+                a) 2 árboles
+              </button>
+              <button
+                onclick="checkAnswer(2, 1, true)"
+                class="q2-opt p-3 text-left text-sm rounded-xl border border-slate-200 hover:bg-slate-50 transition"
+              >
+                b) 4 árboles
+              </button>
+              <button
+                onclick="checkAnswer(2, 2, false)"
+                class="q2-opt p-3 text-left text-sm rounded-xl border border-slate-200 hover:bg-slate-50 transition"
+              >
+                c) 5 árboles
+              </button>
+            </div>
+            <p id="q2-feedback" class="text-xs font-medium hidden"></p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer
+      class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 mt-12"
+    >
+      <div class="max-w-7xl mx-auto px-4 text-center text-xs space-y-2">
+        <p>Guía de Árboles e Interactivo de Matemáticas Discretas</p>
+        <p class="text-slate-600">
+          Desarrollado con HTML5, Tailwind CSS y MathJax
+        </p>
+      </div>
+    </footer>
+
+    <!-- LÓGICA JAVASCRIPT DEL SIMULADOR E INTERACTIVO -->
+    <script>
+      // ESTADO GLOBAL DEL GRAFO
+      let nodes = []; // [{id: 0, x: 100, y: 100, isRoot: false}]
+      let edges = []; // [{source: 0, target: 1}]
+      let currentMode = 'add'; // 'add', 'connect', 'root', 'delete'
+      let selectedNodeId = null;
+      let nodeCounter = 0;
+
+      const canvas = document.getElementById('svg-canvas');
+      const statusBanner = document.getElementById('status-banner');
+
+      // Inicialización de Eventos en el Canvas
+      canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        if (currentMode === 'add') {
+          if (nodes.length >= 25) {
+            showStatus(
+              'Límite de 25 nodos alcanzado para óptima visualización.',
+              'warning'
+            );
+            return;
+          }
+          addNode(x, y);
+        }
+      });
+
+      function setMode(mode) {
+        currentMode = mode;
+        selectedNodeId = null;
+
+        document.querySelectorAll('.mode-btn').forEach((btn) => {
+          btn.classList.remove('bg-nature-600', 'text-white', 'shadow-sm');
+          btn.classList.add('bg-slate-100', 'text-slate-700');
+        });
+
+        const activeBtn = document.getElementById(`btn-mode-${mode}`);
+        if (activeBtn) {
+          activeBtn.classList.remove('bg-slate-100', 'text-slate-700');
+          activeBtn.classList.add('bg-nature-600', 'text-white', 'shadow-sm');
+        }
+
+        switch (mode) {
+          case 'add':
+            showStatus(
+              'Modo: Añadir Nodo. Haz clic en cualquier lugar del lienzo.'
+            );
+            break;
+          case 'connect':
+            showStatus(
+              'Modo: Unir Nodos. Haz clic en el primer nodo y luego en el segundo.'
+            );
+            break;
+          case 'root':
+            showStatus(
+              'Modo: Seleccionar Raíz. Haz clic en un nodo para designarlo raíz de su árbol.'
+            );
+            break;
+          case 'delete':
+            showStatus(
+              'Modo: Borrar Nodo. Haz clic sobre un nodo para eliminarlo.'
+            );
+            break;
+        }
+        renderGraph();
+      }
+
+      function showStatus(msg, type = 'info') {
+        statusBanner.textContent = msg;
+        if (type === 'warning') {
+          statusBanner.className =
+            'absolute top-4 left-4 bg-amber-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium shadow-md';
+        } else {
+          statusBanner.className =
+            'absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-600 shadow-sm font-medium';
+        }
+      }
+
+      function addNode(x, y) {
+        const newNode = {
+          id: nodeCounter++,
+          x: Math.round(x),
+          y: Math.round(y),
+          isRoot: false,
+        };
+        nodes.push(newNode);
+        renderGraph();
+      }
+
+      function handleNodeClick(e, nodeId) {
+        e.stopPropagation();
+
+        if (currentMode === 'delete') {
+          nodes = nodes.filter((n) => n.id !== nodeId);
+          edges = edges.filter(
+            (edge) => edge.source !== nodeId && edge.target !== nodeId
+          );
+          renderGraph();
+          return;
+        }
+
+        if (currentMode === 'root') {
+          // Marcar como raíz y desmarcar otros nodos en la misma componente
+          const component = getConnectedComponent(nodeId);
+          nodes.forEach((n) => {
+            if (component.includes(n.id)) {
+              n.isRoot = n.id === nodeId;
+            }
+          });
+          renderGraph();
+          return;
+        }
+
+        if (currentMode === 'connect') {
+          if (selectedNodeId === null) {
+            selectedNodeId = nodeId;
+            showStatus(
+              `Nodo ${nodeId} seleccionado. Haz clic en el nodo destino.`
+            );
+            renderGraph();
+          } else {
+            if (selectedNodeId === nodeId) {
+              selectedNodeId = null;
+              showStatus('Selección cancelada.');
+              renderGraph();
+              return;
+            }
+
+            // Verificar si ya existe la arista
+            const exists = edges.some(
+              (e) =>
+                (e.source === selectedNodeId && e.target === nodeId) ||
+                (e.source === nodeId && e.target === selectedNodeId)
+            );
+
+            if (exists) {
+              showStatus(
+                'Ya existe una arista entre estos dos nodos.',
+                'warning'
+              );
+              selectedNodeId = null;
+              renderGraph();
+              return;
+            }
+
+            // BLOQUEO DE CICLOS: Validar si añadir esta arista crea un ciclo
+            if (wouldCreateCycle(selectedNodeId, nodeId)) {
+              showStatus(
+                `⚠️ Acción bloqueada: Conectar ${selectedNodeId} y ${nodeId} crearía un ciclo (viola regla de árbol).`,
+                'warning'
+              );
+              selectedNodeId = null;
+              renderGraph();
+              return;
+            }
+
+            edges.push({ source: selectedNodeId, target: nodeId });
+            selectedNodeId = null;
+            showStatus('Arista añadida exitosamente.');
+            renderGraph();
+          }
+        }
+      }
+
+      // Algoritmo DFS para detección de ciclos
+      function wouldCreateCycle(u, v) {
+        let visited = {};
+        let queue = [u];
+        visited[u] = true;
+
+        while (queue.length > 0) {
+          let curr = queue.shift();
+          if (curr === v) return true; // Hay un camino existente entre u y v, añadir arista crearía un ciclo
+
+          // Obtener vecinos
+          let neighbors = [];
+          edges.forEach((e) => {
+            if (e.source === curr) neighbors.push(e.target);
+            if (e.target === curr) neighbors.push(e.source);
+          });
+
+          for (let neighbor of neighbors) {
+            if (!visited[neighbor]) {
+              visited[neighbor] = true;
+              queue.push(neighbor);
+            }
+          }
+        }
+        return false;
+      }
+
+      // Obtener nodos de una componente conexa
+      function getConnectedComponent(startNodeId) {
+        let component = [];
+        let visited = {};
+        let queue = [startNodeId];
+        visited[startNodeId] = true;
+
+        while (queue.length > 0) {
+          let curr = queue.shift();
+          component.push(curr);
+
+          let neighbors = [];
+          edges.forEach((e) => {
+            if (e.source === curr) neighbors.push(e.target);
+            if (e.target === curr) neighbors.push(e.source);
+          });
+
+          for (let neighbor of neighbors) {
+            if (!visited[neighbor]) {
+              visited[neighbor] = true;
+              queue.push(neighbor);
+            }
+          }
+        }
+        return component;
+      }
+
+      // Calcular Grado y Profundidades por componente
+      function calculateNodeMetrics() {
+        let metrics = {};
+
+        nodes.forEach((n) => {
+          metrics[n.id] = { degree: 0, depth: 0 };
+        });
+
+        // Grado
+        edges.forEach((e) => {
+          if (metrics[e.source]) metrics[e.source].degree++;
+          if (metrics[e.target]) metrics[e.target].degree++;
+        });
+
+        // Profundidad por componentes
+        let components = getAllComponents();
+
+        components.forEach((comp) => {
+          // Encontrar la raíz de la componente (si existe), o asignar el primer nodo como raíz por defecto
+          let rootNode = nodes.find((n) => comp.includes(n.id) && n.isRoot);
+          if (!rootNode) {
+            rootNode = nodes.find((n) => n.id === comp[0]);
+          }
+
+          // BFS desde la raíz para calcular profundidades
+          if (rootNode) {
+            let queue = [{ id: rootNode.id, depth: 0 }];
+            let visited = {};
+            visited[rootNode.id] = true;
+
+            while (queue.length > 0) {
+              let curr = queue.shift();
+              metrics[curr.id].depth = curr.depth;
+
+              let neighbors = [];
+              edges.forEach((e) => {
+                if (e.source === curr.id) neighbors.push(e.target);
+                if (e.target === curr.id) neighbors.push(e.source);
+              });
+
+              for (let neighbor of neighbors) {
+                if (!visited[neighbor]) {
+                  visited[neighbor] = true;
+                  queue.push({ id: neighbor, depth: curr.depth + 1 });
+                }
+              }
+            }
+          }
+        });
+
+        return metrics;
+      }
+
+      function getAllComponents() {
+        let visited = {};
+        let components = [];
+
+        nodes.forEach((n) => {
+          if (!visited[n.id]) {
+            let comp = getConnectedComponent(n.id);
+            comp.forEach((id) => (visited[id] = true));
+            components.push(comp);
+          }
+        });
+
+        return components;
+      }
+
+      function clearGraph() {
+        nodes = [];
+        edges = [];
+        nodeCounter = 0;
+        selectedNodeId = null;
+        renderGraph();
+        showStatus('Lienzo limpiado.');
+      }
+
+      // DIBUJADO Y RENDERIZADO DEL GRAFO EN SVG
+      function renderGraph() {
+        canvas.innerHTML = '';
+        const metrics = calculateNodeMetrics();
+
+        // Renderizar Aristas
+        edges.forEach((e) => {
+          const sourceNode = nodes.find((n) => n.id === e.source);
+          const targetNode = nodes.find((n) => n.id === e.target);
+          if (sourceNode && targetNode) {
+            const line = document.createElementNS(
+              'http://www.w3.org/2000/svg',
+              'line'
+            );
+            line.setAttribute('x1', sourceNode.x);
+            line.setAttribute('y1', sourceNode.y);
+            line.setAttribute('x2', targetNode.x);
+            line.setAttribute('y2', targetNode.y);
+            line.setAttribute('stroke', '#0284c7');
+            line.setAttribute('stroke-width', '2.5');
+            line.setAttribute('stroke-linecap', 'round');
+            canvas.appendChild(line);
+          }
+        });
+
+        // Renderizar Nodos
+        nodes.forEach((n) => {
+          const group = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'g'
+          );
+          group.setAttribute('class', 'cursor-pointer');
+          group.onclick = (e) => handleNodeClick(e, n.id);
+
+          // Círculo exterior (resaltado raíz o selección)
+          const circle = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'circle'
+          );
+          circle.setAttribute('cx', n.x);
+          circle.setAttribute('cy', n.y);
+          circle.setAttribute('r', '18');
+
+          if (selectedNodeId === n.id) {
+            circle.setAttribute('fill', '#f59e0b');
+            circle.setAttribute('stroke', '#d97706');
+          } else if (n.isRoot) {
+            circle.setAttribute('fill', '#10b981');
+            circle.setAttribute('stroke', '#047857');
+          } else {
+            circle.setAttribute('fill', '#0284c7');
+            circle.setAttribute('stroke', '#0369a1');
+          }
+          circle.setAttribute('stroke-width', '2');
+          group.appendChild(circle);
+
+          // Texto ID del Nodo
+          const text = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'text'
+          );
+          text.setAttribute('x', n.x);
+          text.setAttribute('y', n.y + 4);
+          text.setAttribute('text-anchor', 'middle');
+          text.setAttribute('fill', 'white');
+          text.setAttribute('font-size', '12');
+          text.setAttribute('font-weight', 'bold');
+          text.textContent = n.id;
+          group.appendChild(text);
+
+          // Etiqueta Superior / Inferior con Métricas (P: Profundidad, G: Grado)
+          const metaText = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'text'
+          );
+          metaText.setAttribute('x', n.x);
+          metaText.setAttribute('y', n.y + 32);
+          metaText.setAttribute('text-anchor', 'middle');
+          metaText.setAttribute('fill', '#475569');
+          metaText.setAttribute('font-size', '10');
+          metaText.setAttribute('font-weight', '600');
+          metaText.textContent = `P:${metrics[n.id].depth} | G:${
+            metrics[n.id].degree
+          }`;
+          group.appendChild(metaText);
+
+          // Indicador visual de Raíz
+          if (n.isRoot) {
+            const crown = document.createElementNS(
+              'http://www.w3.org/2000/svg',
+              'text'
+            );
+            crown.setAttribute('x', n.x);
+            crown.setAttribute('y', n.y - 22);
+            crown.setAttribute('text-anchor', 'middle');
+            crown.setAttribute('fill', '#f59e0b');
+            crown.setAttribute('font-size', '12');
+            crown.textContent = '👑';
+            group.appendChild(crown);
+          }
+
+          canvas.appendChild(group);
+        });
+
+        updateStatsAndBreakdown(metrics);
+      }
+
+      // ACTUALIZACIÓN DE ESTADÍSTICAS Y PANEL DE DESGLOSE INDIVIDUAL
+      function updateStatsAndBreakdown(metrics) {
+        const N = nodes.length;
+        const E = edges.length;
+        const components = getAllComponents();
+        const M = components.length;
+
+        let maxDegree = 0;
+        let maxHeight = 0;
+
+        Object.values(metrics).forEach((m) => {
+          if (m.degree > maxDegree) maxDegree = m.degree;
+          if (m.depth > maxHeight) maxHeight = m.depth;
+        });
+
+        document.getElementById('stat-n').textContent = N;
+        document.getElementById('stat-e').textContent = E;
+        document.getElementById('stat-m').textContent = M;
+        document.getElementById('stat-max-degree').textContent = maxDegree;
+        document.getElementById('stat-max-height').textContent = maxHeight;
+
+        // Renderizar Desglose por Árbol
+        const container = document.getElementById('forest-breakdown-container');
+        container.innerHTML = '';
+
+        if (N === 0) {
+          container.innerHTML = `
+                    <div class="p-6 text-center text-slate-400 text-sm col-span-2">
+                        No hay nodos creados en el simulador. Utiliza las herramientas para añadir nodos y conexiones.
+                    </div>`;
+          return;
+        }
+
+        components.forEach((compNodes, idx) => {
+          const compN = compNodes.length;
+          // Filtrar aristas pertenecientes a esta componente
+          const compEdges = edges.filter(
+            (e) => compNodes.includes(e.source) && compNodes.includes(e.target)
+          );
+          const compE = compEdges.length;
+
+          // Identificar Raíz de esta componente
+          const rootNode =
+            nodes.find((n) => compNodes.includes(n.id) && n.isRoot) ||
+            nodes.find((n) => n.id === compNodes[0]);
+          const rootId = rootNode ? rootNode.id : 'N/A';
+
+          // Métricas locales de la componente
+          let localMaxDegree = 0;
+          let localHeight = 0;
+          compNodes.forEach((id) => {
+            if (metrics[id].degree > localMaxDegree)
+              localMaxDegree = metrics[id].degree;
+            if (metrics[id].depth > localHeight)
+              localHeight = metrics[id].depth;
+          });
+
+          // Clasificación de la estructura
+          let classification = 'Árbol General';
+          if (compN === 1) classification = 'Nodo Aislado (Árbol Trivial)';
+          else if (localMaxDegree <= 2) classification = 'Árbol Camino / Línea';
+          else if (localMaxDegree === compN - 1)
+            classification = 'Árbol Estrellado';
+          else if (localMaxDegree <= 3) classification = 'Árbol Binario';
+
+          // Formatear Lista de Profundidades
+          const depthList = compNodes
+            .map(
+              (id) => `N${id}(P:${metrics[id].depth}, G:${metrics[id].degree})`
+            )
+            .join(', ');
+
+          const treeCard = document.createElement('div');
+          treeCard.className =
+            'bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3';
+          treeCard.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                        <span class="font-bold text-slate-800 text-sm">Árbol #${
+                          idx + 1
+                        }</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-semibold bg-nature-100 text-nature-800">${classification}</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs text-slate-600">
+                        <div><strong>Nodos (\(N_i\)):</strong> ${compN}</div>
+                        <div><strong>Aristas (\(E_i\)):</strong> ${compE}</div>
+                        <div><strong>E = N - 1:</strong> ${
+                          compE === compN - 1
+                            ? '<span class="text-green-600 font-bold">Cumple (E=' +
+                              compE +
+                              ')</span>'
+                            : '<span class="text-red-600">No cumple</span>'
+                        }</div>
+                        <div><strong>Raíz Asignada:</strong> <span class="font-bold text-amber-600">Nodo ${rootId}</span></div>
+                        <div><strong>Grado Máx.:</strong> ${localMaxDegree}</div>
+                        <div><strong>Altura Local:</strong> ${localHeight}</div>
+                    </div>
+                    <div class="pt-2 border-t border-slate-200/60">
+                        <span class="text-[11px] font-semibold text-slate-500 uppercase block mb-1">Nodos y Profundidades:</span>
+                        <p class="text-xs font-mono bg-white p-2 rounded border border-slate-200 text-slate-700 break-words">${depthList}</p>
+                    </div>
+                `;
+          container.appendChild(treeCard);
+        });
+
+        // Re-render MathJax para fórmulas dinámicas
+        if (window.MathJax && window.MathJax.typeset) {
+          window.MathJax.typeset();
+        }
+      }
+
+      // LÓGICA DEL QUIZ INTERACTIVO
+      function checkAnswer(questionNum, optionIdx, isCorrect) {
+        const feedback = document.getElementById(`q${questionNum}-feedback`);
+        const buttons = document.querySelectorAll(`.q${questionNum}-opt`);
+
+        buttons.forEach((btn, idx) => {
+          btn.disabled = true;
+          if (idx === optionIdx) {
+            if (isCorrect) {
+              btn.className =
+                'p-3 text-left text-sm rounded-xl border-2 border-green-500 bg-green-50 text-green-900 font-semibold';
+            } else {
+              btn.className =
+                'p-3 text-left text-sm rounded-xl border-2 border-red-500 bg-red-50 text-red-900 font-semibold';
+            }
+          } else {
+            btn.className =
+              'p-3 text-left text-sm rounded-xl border border-slate-200 opacity-50';
+          }
+        });
+
+        feedback.classList.remove('hidden');
+        if (isCorrect) {
+          feedback.className = 'text-xs font-semibold text-green-600 mt-2';
+          feedback.innerHTML =
+            '¡Correcto! Cumple estrictamente la fórmula \(E = N - 1\).';
+        } else {
+          feedback.className = 'text-xs font-semibold text-red-600 mt-2';
+          feedback.innerHTML =
+            'Incorrecto. Recuerda aplicar la regla fundamental de los árboles e bosques.';
+        }
+
+        if (window.MathJax && window.MathJax.typeset) {
+          window.MathJax.typeset();
+        }
+      }
+
+      // Cargar Grafo de Ejemplo al Iniciar
+      window.onload = function () {
+        // Generar un árbol inicial de ejemplo
+        addNode(180, 80); // 0 Raíz
+        addNode(100, 180); // 1
+        addNode(260, 180); // 2
+        addNode(60, 280); // 3
+        addNode(140, 280); // 4
+
+        nodes[0].isRoot = true;
+
+        edges.push({ source: 0, target: 1 });
+        edges.push({ source: 0, target: 2 });
+        edges.push({ source: 1, target: 3 });
+        edges.push({ source: 1, target: 4 });
+
+        // Segundo árbol independiente en el bosque
+        addNode(480, 120); // 5
+        addNode(480, 240); // 6
+        edges.push({ source: 5, target: 6 });
+        nodes[5].isRoot = true;
+
+        renderGraph();
+      };
+    </script>
+  </body>
+</html>
